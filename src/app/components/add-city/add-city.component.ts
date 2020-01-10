@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectCityService } from '../../core/services/select-city.service';
 import { AddCityService } from '../../core/services/add-city.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,11 +14,12 @@ export class AddCityComponent implements OnInit {
   countries = [];
 
   all_cities_data = [];
+  addCityloader = false;
   constructor(private scs: SelectCityService, private acs: AddCityService, private route: Router) { }
   addCityForm = new FormGroup({
-    city: new FormControl(''),
-    country: new FormControl('null'),
-    continent: new FormControl('null')
+    city: new FormControl('', Validators.required),
+    country: new FormControl('null', Validators.required),
+    continent: new FormControl('null', Validators.required)
   })
   getAllCitiesData() {
     return this.acs.get_all_data().subscribe((resp): any => {
@@ -28,10 +29,15 @@ export class AddCityComponent implements OnInit {
     })
   }
   addNewCity(data) {
-    this.acs.add_new_city(data.value).then((resp): any => {
-      this.addCityForm.reset();
-      this.getAllCitiesData();
-    })
+    this.addCityloader = true;
+    setTimeout(() => {
+      this.acs.add_new_city(data.value).then((resp): any => {
+        this.addCityForm.reset();
+        this.getAllCitiesData();
+        this.addCityloader = false;
+      })
+    }, 1300
+    )
 
   }
   onContinentChange(id) {

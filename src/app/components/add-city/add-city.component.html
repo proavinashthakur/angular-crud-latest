@@ -26,7 +26,10 @@
                 </div>
                 <div class="form-group select-box">
                     <label for="save">Click Here to Add</label>
-                    <button type="text" id="save" class="btn btn-success form-control">Add City</button>
+                    <button type="submit" id="save" class="btn btn-success form-control"
+                        [disabled]="!addCityForm.valid">Add City
+                        <span *ngIf="addCityloader" class="spinner-grow spinner-grow-sm" role="status"
+                            aria-hidden="true"></span> </button>
                 </div>
             </form>
     </div>
